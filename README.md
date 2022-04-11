@@ -1,6 +1,6 @@
 - 👋 Hi, I’m @Darglark
 - 👀 I’m interested in ... makin gams
-- 🌱 I’m currently learning ... C++
+- 🌱 I’m currently learning ... GDScript
 - 💞️ I’m looking to collaborate on ... stuff i need help with
 - 📫 How to reach me ... iykyk
 
