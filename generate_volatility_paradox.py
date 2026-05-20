@@ -46,7 +46,7 @@ def build_volatility_paradox_layout() -> TrackLayout:
         28: (0, 720, 1200, 1680),
         29: (0, 480, 960, 1440),
         30: (240, 480, 1080, 1320),
-        31: (120, 600, 960, 1500),
+        31: (120, 600, 960, 1560),
         32: (0, 480, 960, 1440),
     }
 
@@ -124,7 +124,7 @@ def build_volatility_paradox_layout() -> TrackLayout:
                 )
             )
 
-        sub_segments = _sub_bass_segments_for_bar(bar, hat_holes_by_bar[bar])
+        sub_segments = _sub_bass_segments_for_bar(hat_holes_by_bar[bar])
         for start_tick, duration, shadow_reactive in sub_segments:
             events.append(
                 NoteEvent(
@@ -153,7 +153,7 @@ def compile_volatility_paradox(output_path: pathlib.Path | str = DEFAULT_OUTPUT_
     return destination
 
 
-def _sub_bass_segments_for_bar(bar: int, hole_ticks: Iterable[int]) -> list[tuple[int, int, bool]]:
+def _sub_bass_segments_for_bar(hole_ticks: Iterable[int]) -> list[tuple[int, int, bool]]:
     reactive_ticks = set(hole_ticks)
     segment_starts = sorted({0, TICKS_PER_BAR} | reactive_ticks)
     segments: list[tuple[int, int, bool]] = []

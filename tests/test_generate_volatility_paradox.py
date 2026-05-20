@@ -58,6 +58,15 @@ class VolatilityParadoxLayoutTest(unittest.TestCase):
         }
         self.assertEqual(hole_positions, sub_bass_shadow_positions)
 
+    def test_hi_hat_holes_align_to_gate_hit_grid(self):
+        generator = load_generator()
+
+        layout = generator.build_volatility_paradox_layout()
+        gated_holes = [event for event in layout.events if event.track == "hi_hat_gated_holes"]
+
+        for event in gated_holes:
+            self.assertEqual(0, event.start_tick % 120)
+
     def test_compiler_writes_non_empty_midi_asset(self):
         generator = load_generator()
         output_path = PROJECT_ROOT / "assets" / "volatility_paradox.mid"
