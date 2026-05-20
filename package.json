@@ -13,6 +13,7 @@
   "dependencies": {
     "@phantom/browser-sdk": "^2.0.2",
     "@phantom/react-sdk": "^2.0.2",
+    "convex": "^1.39.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

@@ -16,10 +16,25 @@ It integrates Phantom Connect for Solana-only commander identity signing.
 ```bash
 npm install
 cp .env.example .env
+npx convex dev
 npm run dev
 ```
 
-Open the printed local Vite URL in a browser. Without env vars, the app runs in extension-only mode.
+Open the printed local Vite URL in a browser. Without Phantom env vars, the app runs in extension-only mode.
+Without `VITE_CONVEX_URL`, the shared briefing panel shows setup instructions instead of live data.
+
+## Optional Convex live backend
+
+Run the Convex development server and copy the deployment URL into `.env`:
+
+```bash
+npx convex dev
+VITE_CONVEX_URL=https://your-deployment.convex.cloud
+```
+
+The app includes a Convex schema and CRUD functions for `commandBriefings`. Once `VITE_CONVEX_URL`
+is set, the command briefing panel lists, creates, completes, and deletes live shared strategy notes.
+Use `npx convex dev` for development; reserve `npx convex deploy` for production deployment.
 
 ## Optional Phantom Portal / social providers
 
@@ -43,6 +58,7 @@ Add the redirect URL to the Phantom Portal allowlist before testing Google or Ap
 ```bash
 npm run build
 npm run dev
+npx convex dev
 ```
 
 Manual checks:
@@ -50,8 +66,10 @@ Manual checks:
 1. Load the app with no wallet connected and confirm all XCOM strategy panels render.
 2. Click tactical doctrine cards and confirm the selected card updates.
 3. Click `Sign Commander Identity` before connecting and confirm the UI shows a helpful error.
-4. With Phantom extension installed, click `Connect Phantom Extension`, approve the connection, then click `Sign Commander Identity`.
-5. Reject a signature request once and confirm the rejection is shown gracefully.
+4. Without `VITE_CONVEX_URL`, confirm the Convex quickstart panel shows setup instructions.
+5. With `VITE_CONVEX_URL` set, add, complete, and delete a shared command briefing.
+6. With Phantom extension installed, click `Connect Phantom Extension`, approve the connection, then click `Sign Commander Identity`.
+7. Reject a signature request once and confirm the rejection is shown gracefully.
 
 ## Phantom safety notes
 
