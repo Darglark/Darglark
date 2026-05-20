@@ -156,6 +156,15 @@ h3 {
   transform: translateY(-1px);
 }
 
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.ghost-button:focus-visible,
+.doctrine-card:focus-visible,
+.protocol-card:focus-visible {
+  outline: 3px solid rgba(110, 231, 255, 0.72);
+  outline-offset: 3px;
+}
+
 .primary-button:disabled,
 .ghost-button:disabled {
   cursor: not-allowed;
@@ -298,6 +307,7 @@ h3 {
 }
 
 .doctrine-panel,
+.education-panel,
 .chosen-panel {
   margin-top: 18px;
 }
@@ -339,9 +349,108 @@ h3 {
 }
 
 .doctrine-card p,
+.protocol-card p,
+.protocol-briefing p,
+.protocol-checklist,
 .squad-card p:not(.eyebrow),
 .chosen-list p {
   color: #c5d7e2;
+}
+
+.education-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.protocol-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.protocol-card {
+  display: grid;
+  gap: 10px;
+  min-height: 214px;
+  padding: 18px;
+  border: 1px solid rgba(134, 218, 255, 0.14);
+  border-radius: 20px;
+  color: #edf7ff;
+  text-align: left;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+    rgba(255, 255, 255, 0.028);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.protocol-card:hover {
+  transform: translateY(-2px);
+}
+
+.protocol-card.active {
+  border-color: rgba(255, 184, 107, 0.76);
+  background: linear-gradient(135deg, rgba(255, 184, 107, 0.18), rgba(79, 240, 183, 0.08));
+}
+
+.protocol-card span,
+.protocol-code {
+  color: var(--orange);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.protocol-card span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 184, 107, 0.38);
+  border-radius: 50%;
+  background: rgba(255, 184, 107, 0.1);
+}
+
+.protocol-card strong {
+  font-size: 1.1rem;
+}
+
+.protocol-briefing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid rgba(79, 240, 183, 0.2);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(79, 240, 183, 0.16), transparent 16rem),
+    rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  translate: 0;
+  transition:
+    opacity 0.28s ease,
+    translate 0.28s ease;
+}
+
+@starting-style {
+  .protocol-briefing {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+
+.protocol-checklist {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding-left: 20px;
 }
 
 .squad-card {
@@ -367,6 +476,8 @@ h3 {
   .status-grid,
   .recommendation-grid,
   .doctrine-options,
+  .education-layout,
+  .protocol-options,
   .chosen-list {
     grid-template-columns: 1fr;
   }
@@ -377,5 +488,25 @@ h3 {
 
   .scanner-card {
     min-height: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button,
+  .secondary-button,
+  .ghost-button,
+  .protocol-card,
+  .protocol-briefing {
+    transition-duration: 0.01ms;
+  }
+
+  .protocol-card:hover {
+    transform: none;
+  }
+
+  @starting-style {
+    .protocol-briefing {
+      translate: none;
+    }
   }
 }

@@ -40,6 +40,27 @@ const doctrines = [
   },
 ];
 
+const educationProtocols = [
+  {
+    code: "S",
+    label: "Secure the squad",
+    lesson: "Confirm cover, mobility, and medkit coverage before revealing the next pod.",
+    drill: "Run a readiness check: blue move, overwatch lanes, Specialist action economy.",
+  },
+  {
+    code: "C",
+    label: "Classify the contact",
+    lesson: "Identify the enemy that can break your plan first, then spend resources to remove it.",
+    drill: "Mark the panic source, armor source, or flank threat before committing explosives.",
+  },
+  {
+    code: "P",
+    label: "Practice the response",
+    lesson: "Rehearse the fallback before the first shot so misses do not cascade into squad wipes.",
+    drill: "Name the retreat tile, emergency mimic beacon, and guaranteed damage option.",
+  },
+];
+
 const squadCards = [
   {
     name: "Chosen Hunter Counter-Squad",
@@ -92,6 +113,7 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
   const { isInstalled, isLoading: isExtensionLoading } = useIsExtensionInstalled();
   const { open } = useModal();
   const [selectedDoctrine, setSelectedDoctrine] = useState(doctrines[0].title);
+  const [selectedProtocol, setSelectedProtocol] = useState(educationProtocols[0].label);
   const [signedIdentity, setSignedIdentity] = useState<SignedIdentity | null>(null);
   const [walletError, setWalletError] = useState<string | null>(null);
   const [isSigning, setIsSigning] = useState(false);
@@ -101,6 +123,10 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
   const selectedDoctrineDetail = useMemo(
     () => doctrines.find((doctrine) => doctrine.title === selectedDoctrine) ?? doctrines[0],
     [selectedDoctrine],
+  );
+  const selectedProtocolDetail = useMemo(
+    () => educationProtocols.find((protocol) => protocol.label === selectedProtocol) ?? educationProtocols[0],
+    [selectedProtocol],
   );
 
   const handleConnectExtension = async () => {
@@ -142,6 +168,7 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
       "Shadow Chamber Command commander identity",
       `Address: ${activeAddress}`,
       `Doctrine: ${selectedDoctrineDetail.title}`,
+      `SCP Education Protocol: ${selectedProtocolDetail.code} - ${selectedProtocolDetail.label}`,
       `Signed at: ${signedAt}`,
       "Purpose: Establish a read-only XCOM 2 WOTC strategy profile. No transactions or spending approvals.",
     ].join("\n");
@@ -192,8 +219,8 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
         <div className="scanner-card" aria-label="Campaign readiness">
           <span className="scanner-line" />
           <p>Threat Readout</p>
-          <strong>Chosen activity rising</strong>
-          <span>Recommended response: secure identity, set doctrine, counter traits.</span>
+          <strong>SCP protocol online</strong>
+          <span>Recommended response: secure identity, classify contact, practice response.</span>
         </div>
       </section>
 
@@ -276,6 +303,40 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
               <p>{doctrine.focus}</p>
             </button>
           ))}
+        </div>
+      </section>
+
+      <section className="panel education-panel">
+        <div className="panel-heading">
+          <p className="eyebrow">SCP Education Protocol</p>
+          <h2>Train the next decision before the next pod activates</h2>
+        </div>
+        <div className="education-layout">
+          <div className="protocol-options" aria-label="SCP protocol stages">
+            {educationProtocols.map((protocol) => (
+              <button
+                aria-pressed={protocol.label === selectedProtocol}
+                className={protocol.label === selectedProtocol ? "protocol-card active" : "protocol-card"}
+                key={protocol.label}
+                type="button"
+                onClick={() => setSelectedProtocol(protocol.label)}
+              >
+                <span>{protocol.code}</span>
+                <strong>{protocol.label}</strong>
+                <p>{protocol.lesson}</p>
+              </button>
+            ))}
+          </div>
+          <article className="protocol-briefing" aria-live="polite">
+            <span className="protocol-code">Protocol {selectedProtocolDetail.code}</span>
+            <h3>{selectedProtocolDetail.label}</h3>
+            <p>{selectedProtocolDetail.drill}</p>
+            <ul className="protocol-checklist">
+              <li>Read the tactical state before spending the first action.</li>
+              <li>Choose one failure response before taking the highest-risk shot.</li>
+              <li>Keep the app usable as a field manual even without a wallet connected.</li>
+            </ul>
+          </article>
         </div>
       </section>
 
