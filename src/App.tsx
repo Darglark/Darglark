@@ -8,9 +8,11 @@ import {
   usePhantom,
   useSolana,
 } from "@phantom/react-sdk";
+import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
 import { AuthStatus } from "./AuthStatus";
 
 type AppProps = {
+  hasConvex: boolean;
   hasPortalProviders: boolean;
   hasConvexAuth: boolean;
   redirectUrl: string;
@@ -106,6 +108,7 @@ function getErrorMessage(error: unknown) {
   return "Phantom returned an unexpected response. Try again from the wallet prompt.";
 }
 
+export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppProps) {
 export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
@@ -366,6 +369,12 @@ export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: 
           ))}
         </div>
       </section>
+
+      {hasConvex ? (
+        <ConvexBriefings doctrine={selectedDoctrineDetail.title} protocol={selectedProtocolDetail.label} />
+      ) : (
+        <ConvexSetupPanel />
+      )}
     </main>
   );
 }
