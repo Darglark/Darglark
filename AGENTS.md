@@ -6,12 +6,15 @@ This is a GitHub profile README repository (the special `username/username` repo
 
 ### Development workflow
 
+- **Lint**: `markdownlint README.md` (installed globally via `npm install -g markdownlint-cli`)
 - **Lint**: No lint tooling is configured. Optionally run `npx markdownlint-cli README.md` for Markdown style checks, but note the existing README has intentional stylistic choices (e.g., no top-level heading).
 - **Tests**: No automated tests exist; visual verification is done on GitHub.
 - **Build/Run**: Not applicable — the README is rendered by GitHub when visiting the profile page.
 
 ### Notes
 
+- The existing README has pre-existing markdownlint warnings (MD041 missing top-level heading, MD013 line-length). These are stylistic choices by the repo owner.
+- Any changes should be limited to `README.md` content updates.
 - Any changes should be limited to `README.md` content updates.
 - This repo has no dependencies, no `package.json`, and no build configuration.
 This repository is a Vite + React + TypeScript single-page app for XCOM 2: War of the Chosen strategy recommendations with Phantom commander identity signing.
