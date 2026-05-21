@@ -9,10 +9,12 @@ import {
   useSolana,
 } from "@phantom/react-sdk";
 import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
+import { AuthStatus } from "./AuthStatus";
 
 type AppProps = {
   hasConvex: boolean;
   hasPortalProviders: boolean;
+  hasConvexAuth: boolean;
   redirectUrl: string;
 };
 
@@ -107,6 +109,7 @@ function getErrorMessage(error: unknown) {
 }
 
 export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppProps) {
+export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
   const { isConnected } = usePhantom();
@@ -266,6 +269,8 @@ export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppP
           </div>
           {walletError ? <p className="error-banner">{walletError}</p> : null}
         </article>
+
+        {hasConvexAuth ? <AuthStatus /> : null}
 
         <article className="panel identity-panel">
           <div className="panel-heading">

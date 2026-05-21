@@ -5,6 +5,7 @@ import { PhantomProvider, darkTheme } from "@phantom/react-sdk";
 import type { PhantomSDKConfig } from "@phantom/react-sdk";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import App from "./App";
+import { ConvexAuthProvider, hasConvexAuth } from "./ConvexAuthProvider";
 import "./styles.css";
 
 const phantomAppId = import.meta.env.VITE_PHANTOM_APP_ID?.trim();
@@ -37,5 +38,10 @@ const app = (
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {convex ? <ConvexProvider client={convex}>{app}</ConvexProvider> : app}
+    <ConvexAuthProvider>
+      <PhantomProvider config={phantomConfig} theme={darkTheme} appName="Shadow Chamber Command">
+        <App hasPortalProviders={Boolean(phantomAppId)} hasConvexAuth={hasConvexAuth} redirectUrl={redirectUrl} />
+      </PhantomProvider>
+    </ConvexAuthProvider>
   </StrictMode>,
 );
