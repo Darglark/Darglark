@@ -8,9 +8,11 @@ import {
   usePhantom,
   useSolana,
 } from "@phantom/react-sdk";
+import { AuthStatus } from "./AuthStatus";
 
 type AppProps = {
   hasPortalProviders: boolean;
+  hasConvexAuth: boolean;
   redirectUrl: string;
 };
 
@@ -104,7 +106,7 @@ function getErrorMessage(error: unknown) {
   return "Phantom returned an unexpected response. Try again from the wallet prompt.";
 }
 
-export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
+export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
   const { isConnected } = usePhantom();
@@ -264,6 +266,8 @@ export default function App({ hasPortalProviders, redirectUrl }: AppProps) {
           </div>
           {walletError ? <p className="error-banner">{walletError}</p> : null}
         </article>
+
+        {hasConvexAuth ? <AuthStatus /> : null}
 
         <article className="panel identity-panel">
           <div className="panel-heading">
