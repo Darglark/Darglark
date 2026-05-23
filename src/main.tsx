@@ -12,7 +12,6 @@ const convexUrl = import.meta.env.VITE_CONVEX_URL?.trim();
 const redirectUrl =
   import.meta.env.VITE_PHANTOM_REDIRECT_URL?.trim() ||
   new URL("/auth/phantom/callback", window.location.origin).toString();
-const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
 
 const phantomConfig: PhantomSDKConfig = phantomAppId
   ? {
