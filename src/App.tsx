@@ -109,7 +109,7 @@ function getErrorMessage(error: unknown) {
 }
 
 export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppProps) {
-export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
+export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
   const { isConnected } = usePhantom();
