@@ -10,6 +10,8 @@ import {
 } from "@phantom/react-sdk";
 import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
 import { AuthStatus } from "./AuthStatus";
+import { RailsThorneGuardPanel } from "./RailsThorneGuardPanel";
+import { RougeTileStatsPanel } from "./RougeTileStatsPanel";
 
 type AppProps = {
   hasConvex: boolean;
@@ -108,8 +110,7 @@ function getErrorMessage(error: unknown) {
   return "Phantom returned an unexpected response. Try again from the wallet prompt.";
 }
 
-export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppProps) {
-export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
+export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
   const { isConnected } = usePhantom();
@@ -132,6 +133,23 @@ export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: 
   const selectedProtocolDetail = useMemo(
     () => educationProtocols.find((protocol) => protocol.label === selectedProtocol) ?? educationProtocols[0],
     [selectedProtocol],
+  );
+  const selectedDoctrineIndex = doctrines.findIndex((doctrine) => doctrine.title === selectedDoctrine);
+  const selectedProtocolIndex = educationProtocols.findIndex((protocol) => protocol.label === selectedProtocol);
+  const meshState = useMemo(
+    () => ({
+      innocenceScale: 0.54 + Math.max(selectedProtocolIndex, 0) * 0.14,
+      funVector: 0.62 + Math.max(selectedDoctrineIndex, 0) * 0.12,
+    }),
+    [selectedDoctrineIndex, selectedProtocolIndex],
+  );
+  const hostTelemetry = useMemo(
+    () => ({
+      stressVelocity: Math.min(0.99, 0.91 + Math.max(selectedDoctrineIndex, 0) * 0.03),
+      companionLoad: 0.52 + Math.max(selectedProtocolIndex, 0) * 0.1,
+      entityInstability: selectedDoctrineDetail.title === "Psi Ops Endgame" ? 0.82 : 0.56,
+    }),
+    [selectedDoctrineDetail.title, selectedDoctrineIndex, selectedProtocolIndex],
   );
 
   const handleConnectExtension = async () => {
@@ -346,6 +364,15 @@ export default function App({ hasPortalProviders, hasConvexAuth, redirectUrl }: 
           </article>
         </div>
       </section>
+
+      <RailsThorneGuardPanel
+        doctrine={selectedDoctrineDetail.title}
+        hostTelemetry={hostTelemetry}
+        meshState={meshState}
+        protocol={selectedProtocolDetail.label}
+      />
+
+      <RougeTileStatsPanel />
 
       <section className="recommendation-grid">
         {squadCards.map((card) => (
