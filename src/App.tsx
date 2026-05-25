@@ -11,6 +11,7 @@ import {
 import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
 import { AuthStatus } from "./AuthStatus";
 import { RailsThorneGuardPanel } from "./RailsThorneGuardPanel";
+import { RougeTileStatsPanel } from "./RougeTileStatsPanel";
 
 type AppProps = {
   hasConvex: boolean;
@@ -370,6 +371,8 @@ export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redi
         meshState={meshState}
         protocol={selectedProtocolDetail.label}
       />
+
+      <RougeTileStatsPanel />
 
       <section className="recommendation-grid">
         {squadCards.map((card) => (

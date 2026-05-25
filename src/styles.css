@@ -309,6 +309,7 @@ h3 {
 .doctrine-panel,
 .education-panel,
 .rails-thorne-panel,
+.rouge-stats-panel,
 .chosen-panel,
 .convex-panel {
   margin-top: 18px;
@@ -573,6 +574,87 @@ h3 {
   text-align: right;
 }
 
+.rouge-stats-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 102, 0, 0.1), rgba(58, 0, 115, 0.08)),
+    var(--panel-strong);
+}
+
+.rouge-stats-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1fr);
+  gap: 18px;
+}
+
+.rouge-stat-list {
+  display: grid;
+  gap: 10px;
+}
+
+.rouge-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 102, 0, 0.22);
+  border-radius: 18px;
+  background: rgba(255, 102, 0, 0.07);
+}
+
+.rouge-stat-row span {
+  color: #ffcfb0;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rouge-stat-row strong {
+  color: #ff6600;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.rouge-stat-controls {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.rouge-stat-controls > p {
+  margin: 0;
+  color: #d8c6ba;
+}
+
+.rouge-action-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.achievement-hook {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid rgba(110, 231, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.achievement-hook span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.achievement-hook code {
+  color: #dffcef;
+  overflow-wrap: anywhere;
+}
+
 .briefing-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -644,6 +726,7 @@ h3 {
   .doctrine-options,
   .education-layout,
     .rbc-layout,
+    .rouge-stats-layout,
   .protocol-options,
   .chosen-list {
     grid-template-columns: 1fr;
