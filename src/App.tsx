@@ -108,7 +108,6 @@ function getErrorMessage(error: unknown) {
   return "Phantom returned an unexpected response. Try again from the wallet prompt.";
 }
 
-export default function App({ hasConvex, hasPortalProviders, redirectUrl }: AppProps) {
 export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redirectUrl }: AppProps) {
   const { connect, isConnecting } = useConnect();
   const { disconnect, isDisconnecting } = useDisconnect();
