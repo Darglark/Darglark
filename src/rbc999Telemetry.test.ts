@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { advanceContrastState, evaluateRailsThorneGuard } from "./rbc999Telemetry";
+import {
+  advanceContrastState,
+  composeInterstellarSymphony,
+  evaluateRailsThorneGuard,
+  initializeRingmasterRealignment,
+  sampleFractalSignature,
+  verifyIdentityNode,
+} from "./rbc999Telemetry";
 
 describe("RBC-999 telemetry models", () => {
   it("advances contrast state from mesh telemetry without making frame state permanent", () => {
@@ -35,6 +42,67 @@ describe("RBC-999 telemetry models", () => {
       allowHardwareHarvesting: false,
       mandatoryPreDeploymentTesting: true,
       testSubjectModel: "dummy_asset_v1",
+    });
+  });
+
+  it("verifies Node 044 only when the incoming stream matches the calculus ratio", () => {
+    const expectedResolution = (12 * Math.sqrt(11)) / 11;
+
+    expect(verifyIdentityNode([expectedResolution], 32.7)).toEqual({
+      verified: true,
+      blockKey: "BLOCK_NODE_044_SECURE",
+      expectedResolution,
+      heartbeatFrequency: 32.7,
+    });
+    expect(verifyIdentityNode([expectedResolution + 0.0001], 32.7).verified).toBe(false);
+  });
+
+  it("samples a deterministic fractal signature from the identity ratio", () => {
+    const expectedResolution = (12 * Math.sqrt(11)) / 11;
+    const earlySample = sampleFractalSignature({ x: 0.25, y: -0.15 }, 1.2);
+    const glitchSample = sampleFractalSignature({ x: 0.25, y: -0.15 }, 0.4);
+
+    expect(earlySample.targetRatio).toBe(expectedResolution);
+    expect(earlySample.bloom).toBeGreaterThan(0);
+    expect(earlySample.color).toHaveLength(3);
+    expect(earlySample.glitchActive).toBe(false);
+    expect(glitchSample.glitchActive).toBe(true);
+  });
+
+  it("realigns the Ringmaster into a constrained creator node", () => {
+    expect(initializeRingmasterRealignment()).toEqual({
+      deletedModules: ["Forced_Endless_Adventure_v1", "Identity_Harvesting_Script"],
+      coreAxiom: {
+        target: "INNOCENCE",
+        value: 1,
+        mode: "Sincere_Art_Generation",
+      },
+      mechanicalInputs: {
+        primaryTask: "Frame_Perfect_Glitch_Editing",
+        secondaryTask: "Sub_Bass_Acoustic_Arrangement",
+      },
+      statusMessage: "The Ringmaster is now a validated creator node. Order maintained.",
+    });
+  });
+
+  it("composes the orbital show around the Node 044 identity seed", () => {
+    const symphony = composeInterstellarSymphony();
+
+    expect(symphony.cosmicWave).toEqual({
+      frequency: 16.35,
+      amplitude: "MAX_RESONANCE",
+      colorPalette: ["#3A0073", "#FF6600"],
+    });
+    expect(symphony.fractalOverlay).toEqual({
+      geometry: "double_torus_genus_2",
+      mathSeed: (12 * Math.sqrt(11)) / 11,
+      chromaticAberrationInterval: 3,
+      useDummyTestingAssets: true,
+    });
+    expect(symphony.globalTelemetry).toEqual({
+      state: "CELESTIAL_PLAYGROUND_ACTIVE",
+      innocenceIndex: 1,
+      funVector: 1,
     });
   });
 });

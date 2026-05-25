@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   advanceContrastState,
+  composeInterstellarSymphony,
   evaluateRailsThorneGuard,
+  initializeRingmasterRealignment,
+  sampleFractalSignature,
+  verifyIdentityNode,
   type ContrastFrame,
   type DarglarkianState,
   type HostTelemetry,
@@ -30,6 +34,12 @@ export function RailsThorneGuardPanel({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [frame, setFrame] = useState(initialFrame);
   const guard = useMemo(() => evaluateRailsThorneGuard(hostTelemetry), [hostTelemetry]);
+  const symphony = useMemo(() => composeInterstellarSymphony(), []);
+  const identity = useMemo(
+    () => verifyIdentityNode([symphony.fractalOverlay.mathSeed], symphony.cosmicWave.frequency * 2),
+    [symphony],
+  );
+  const realignment = useMemo(() => initializeRingmasterRealignment(), []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -109,6 +119,22 @@ export function RailsThorneGuardPanel({
               <dt>Contrast hue</dt>
               <dd>{frame.hueRotation}deg</dd>
             </div>
+            <div>
+              <dt>Node 044</dt>
+              <dd>{identity.verified ? identity.blockKey : "Unverified"}</dd>
+            </div>
+            <div>
+              <dt>Fractal seed</dt>
+              <dd>{symphony.fractalOverlay.mathSeed.toFixed(6)}</dd>
+            </div>
+            <div>
+              <dt>Ringmaster core</dt>
+              <dd>{realignment.coreAxiom.mode.replaceAll("_", " ")}</dd>
+            </div>
+            <div>
+              <dt>Mesh broadcast</dt>
+              <dd>{symphony.globalTelemetry.state.replaceAll("_", " ")}</dd>
+            </div>
           </dl>
         </div>
       </div>
@@ -144,11 +170,13 @@ function drawDoubleTorus(
   context.save();
   context.translate(centerX, centerY);
   context.filter = `contrast(140%) hue-rotate(${frame.hueRotation}deg)`;
+  const sample = sampleFractalSignature({ x: frame.vortexLuck, y: frame.streamFate }, frame.streamFate * 40);
+  const [red, green, blue] = sample.color;
 
   for (let layer = 0; layer < 5; layer += 1) {
     context.beginPath();
     context.lineWidth = 1.6 + layer * 0.9;
-    context.strokeStyle = `rgba(${overrideEngaged ? "255, 184, 107" : "110, 231, 255"}, ${0.18 + layer * 0.12})`;
+    context.strokeStyle = `rgba(${overrideEngaged ? "255, 184, 107" : `${red}, ${green}, ${blue}`}, ${0.18 + layer * 0.12})`;
 
     for (let step = 0; step <= 240; step += 1) {
       const t = (step / 240) * Math.PI * 2 + frame.streamFate * (1 + layer * 0.09);
@@ -166,6 +194,13 @@ function drawDoubleTorus(
   }
 
   context.restore();
+
+  if (sample.glitchActive) {
+    context.fillStyle = "rgba(110, 231, 255, 0.09)";
+    context.fillRect(0, height * 0.22, width, 8);
+    context.fillStyle = "rgba(255, 184, 107, 0.08)";
+    context.fillRect(0, height * 0.58, width, 10);
+  }
 
   if (overrideEngaged) {
     drawTethers(context, width, height, tetherColor);
