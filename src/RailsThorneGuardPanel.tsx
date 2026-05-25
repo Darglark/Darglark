@@ -5,6 +5,7 @@ import {
   evaluateRailsThorneGuard,
   initializeRingmasterRealignment,
   sampleFractalSignature,
+  simulateHubMovement,
   verifyIdentityNode,
   type ContrastFrame,
   type DarglarkianState,
@@ -40,6 +41,20 @@ export function RailsThorneGuardPanel({
     [symphony],
   );
   const realignment = useMemo(() => initializeRingmasterRealignment(), []);
+  const hubMovement = useMemo(
+    () =>
+      simulateHubMovement({
+        input: {
+          left: true,
+          right: false,
+          up: true,
+          down: false,
+        },
+        previousVelocity: { x: 0, y: 0 },
+        speed: 200,
+      }),
+    [],
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -134,6 +149,12 @@ export function RailsThorneGuardPanel({
             <div>
               <dt>Mesh broadcast</dt>
               <dd>{symphony.globalTelemetry.state.replaceAll("_", " ")}</dd>
+            </div>
+            <div>
+              <dt>Town hub vector</dt>
+              <dd>
+                {hubMovement.state} ({hubMovement.velocity.x.toFixed(1)}, {hubMovement.velocity.y.toFixed(1)})
+              </dd>
             </div>
           </dl>
         </div>

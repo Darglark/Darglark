@@ -87,6 +87,23 @@ export type InterstellarSymphony = {
   };
 };
 
+export type HubMovementInput = {
+  left: boolean;
+  right: boolean;
+  up: boolean;
+  down: boolean;
+};
+
+export type Vector2 = {
+  x: number;
+  y: number;
+};
+
+export type HubMovementState = {
+  velocity: Vector2;
+  state: "moving" | "friction-slowdown" | "idle";
+};
+
 const CRITICAL_ACCELERATION_LIMIT = 0.88;
 export const NODE_044_IDENTITY_RATIO = (12 * Math.sqrt(11)) / 11;
 const FULL_LOOP = Math.PI * 2;
@@ -196,6 +213,39 @@ export function composeInterstellarSymphony(): InterstellarSymphony {
   };
 }
 
+export function simulateHubMovement({
+  input,
+  previousVelocity,
+  speed,
+}: {
+  input: HubMovementInput;
+  previousVelocity: Vector2;
+  speed: number;
+}): HubMovementState {
+  const direction = normalizeVector({
+    x: Number(input.right) - Number(input.left),
+    y: Number(input.down) - Number(input.up),
+  });
+
+  if (direction.x !== 0 || direction.y !== 0) {
+    return {
+      velocity: {
+        x: direction.x * speed,
+        y: direction.y * speed,
+      },
+      state: "moving",
+    };
+  }
+
+  const velocity = moveTowardZero(previousVelocity, speed * 0.2);
+  const isIdle = velocity.x === 0 && velocity.y === 0;
+
+  return {
+    velocity,
+    state: isIdle ? "idle" : "friction-slowdown",
+  };
+}
+
 function foldPoint(point: { x: number; y: number }, ratio: number, iterations: number) {
   let x = point.x;
   let y = point.y;
@@ -222,6 +272,34 @@ function palette(value: number): [number, number, number] {
     Math.round(violet[1] + (orange[1] - violet[1]) * mix),
     Math.round(violet[2] + (orange[2] - violet[2]) * mix),
   ];
+}
+
+function normalizeVector(vector: Vector2): Vector2 {
+  const magnitude = Math.hypot(vector.x, vector.y);
+
+  if (magnitude === 0) {
+    return { x: 0, y: 0 };
+  }
+
+  return {
+    x: vector.x / magnitude,
+    y: vector.y / magnitude,
+  };
+}
+
+function moveTowardZero(vector: Vector2, amount: number): Vector2 {
+  const magnitude = Math.hypot(vector.x, vector.y);
+
+  if (magnitude <= amount) {
+    return { x: 0, y: 0 };
+  }
+
+  const scale = (magnitude - amount) / magnitude;
+
+  return {
+    x: vector.x * scale,
+    y: vector.y * scale,
+  };
 }
 
 function clamp(value: number, min: number, max: number) {

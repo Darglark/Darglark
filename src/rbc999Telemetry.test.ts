@@ -5,6 +5,7 @@ import {
   evaluateRailsThorneGuard,
   initializeRingmasterRealignment,
   sampleFractalSignature,
+  simulateHubMovement,
   verifyIdentityNode,
 } from "./rbc999Telemetry";
 
@@ -104,5 +105,24 @@ describe("RBC-999 telemetry models", () => {
       innocenceIndex: 1,
       funVector: 1,
     });
+  });
+
+  it("normalizes unrestricted 8-direction hub movement and eases to a stop", () => {
+    const moving = simulateHubMovement({
+      input: { left: true, right: false, up: true, down: false },
+      previousVelocity: { x: 0, y: 0 },
+      speed: 200,
+    });
+    const released = simulateHubMovement({
+      input: { left: false, right: false, up: false, down: false },
+      previousVelocity: moving.velocity,
+      speed: 200,
+    });
+
+    expect(moving.velocity.x).toBeCloseTo(-141.42, 2);
+    expect(moving.velocity.y).toBeCloseTo(-141.42, 2);
+    expect(released.velocity.x).toBeCloseTo(-113.14, 2);
+    expect(released.velocity.y).toBeCloseTo(-113.14, 2);
+    expect(released.state).toBe("friction-slowdown");
   });
 });
