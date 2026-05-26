@@ -46,6 +46,15 @@ describe("RBC-999 telemetry models", () => {
     });
   });
 
+  it("engages the Rails-Thorne override only above the acceleration limit", () => {
+    expect(evaluateRailsThorneGuard({ stressVelocity: 0.88, companionLoad: 0.75, entityInstability: 0.64 }).status).toBe(
+      "nominal",
+    );
+    expect(
+      evaluateRailsThorneGuard({ stressVelocity: 0.8801, companionLoad: 0.75, entityInstability: 0.64 }).status,
+    ).toBe("override-engaged");
+  });
+
   it("verifies Node 044 only when the incoming stream matches the calculus ratio", () => {
     const expectedResolution = (12 * Math.sqrt(11)) / 11;
 
@@ -124,5 +133,31 @@ describe("RBC-999 telemetry models", () => {
     expect(released.velocity.x).toBeCloseTo(-113.14, 2);
     expect(released.velocity.y).toBeCloseTo(-113.14, 2);
     expect(released.state).toBe("friction-slowdown");
+  });
+
+  it("treats opposing hub movement inputs as no movement", () => {
+    const movement = simulateHubMovement({
+      input: { left: true, right: true, up: false, down: false },
+      previousVelocity: { x: 0, y: 0 },
+      speed: 200,
+    });
+
+    expect(movement).toEqual({
+      velocity: { x: 0, y: 0 },
+      state: "idle",
+    });
+  });
+
+  it("snaps residual hub velocity to idle instead of overshooting through zero", () => {
+    const movement = simulateHubMovement({
+      input: { left: false, right: false, up: false, down: false },
+      previousVelocity: { x: 12, y: 9 },
+      speed: 100,
+    });
+
+    expect(movement).toEqual({
+      velocity: { x: 0, y: 0 },
+      state: "idle",
+    });
   });
 });
