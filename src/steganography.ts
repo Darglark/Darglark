@@ -15,7 +15,7 @@ function getWritableChannelIndexes(pixelCount: number) {
 }
 
 function numberToBits(value: number, bitCount: number) {
-  return Array.from({ length: bitCount }, (_, bitIndex) => (value >> (bitCount - bitIndex - 1)) & 1);
+  return Array.from({ length: bitCount }, (_, bitIndex) => Math.floor(value / 2 ** (bitCount - bitIndex - 1)) & 1);
 }
 
 function bytesToBits(bytes: Uint8Array) {
@@ -23,10 +23,14 @@ function bytesToBits(bytes: Uint8Array) {
 }
 
 function bitsToNumber(bits: number[]) {
-  return bits.reduce((value, bit) => (value << 1) | bit, 0);
+  return bits.reduce((value, bit) => value * 2 + bit, 0);
 }
 
 function bitsToBytes(bits: number[]) {
+  if (bits.length % 8 !== 0) {
+    throw new Error("Encoded payload is incomplete.");
+  }
+
   const bytes = new Uint8Array(bits.length / 8);
 
   for (let index = 0; index < bytes.length; index += 1) {
@@ -57,9 +61,19 @@ export function embedMessageInPixels(pixels: Uint8ClampedArray, message: string)
 
 export function decodeMessageFromPixels(pixels: Uint8ClampedArray) {
   const writableIndexes = getWritableChannelIndexes(pixels.length);
+
+  if (writableIndexes.length < LENGTH_PREFIX_BITS) {
+    throw new Error("Encoded payload is incomplete.");
+  }
+
   const lengthBits = writableIndexes.slice(0, LENGTH_PREFIX_BITS).map((pixelIndex) => pixels[pixelIndex] & 1);
   const messageByteLength = bitsToNumber(lengthBits);
   const messageBitLength = messageByteLength * 8;
+
+  if (messageBitLength > writableIndexes.length - LENGTH_PREFIX_BITS) {
+    throw new Error("Encoded payload is incomplete.");
+  }
+
   const messageBits = writableIndexes
     .slice(LENGTH_PREFIX_BITS, LENGTH_PREFIX_BITS + messageBitLength)
     .map((pixelIndex) => pixels[pixelIndex] & 1);

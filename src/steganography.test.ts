@@ -28,4 +28,24 @@ describe("LSB steganography encoder", () => {
 
     expect(() => embedMessageInPixels(tiny, "TOO-LARGE")).toThrow("Secret message is too large");
   });
+
+  it("throws when an encoded payload length exceeds the available RGB channels", () => {
+    const corrupted = new Uint8ClampedArray(48).fill(0);
+    corrupted[41] = 1;
+
+    expect(() => decodeMessageFromPixels(corrupted)).toThrow("Encoded payload is incomplete");
+  });
+
+  it("throws when an encoded payload uses the high bit of an overflowing length prefix", () => {
+    const corrupted = new Uint8ClampedArray(48).fill(0);
+    corrupted[0] = 1;
+
+    expect(() => decodeMessageFromPixels(corrupted)).toThrow("Encoded payload is incomplete");
+  });
+
+  it("throws when an encoded payload does not contain a complete length prefix", () => {
+    const corrupted = new Uint8ClampedArray(40).fill(0);
+
+    expect(() => decodeMessageFromPixels(corrupted)).toThrow("Encoded payload is incomplete");
+  });
 });
