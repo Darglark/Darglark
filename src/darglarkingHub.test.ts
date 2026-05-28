@@ -133,7 +133,7 @@ describe("Darglarking Yellow hub", () => {
     });
 
     fileInput.dispatchEvent(new Event("change"));
-    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
     encodeButton.click();
 
     expect(status.textContent).toBe('Embedded and verified secret: "DY-044: the yellow remembers"');
