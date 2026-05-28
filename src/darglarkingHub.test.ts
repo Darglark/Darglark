@@ -106,6 +106,16 @@ describe("Darglarking Yellow hub", () => {
         }
       },
     );
+    vi.stubGlobal(
+      "ImageData",
+      class {
+        constructor(
+          public data: Uint8ClampedArray,
+          public width: number,
+          public height: number,
+        ) {}
+      },
+    );
     vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation((callback) => {
       callback(new Blob(["encoded"], { type: "image/png" }));
     });
