@@ -35,17 +35,17 @@ describe("Darglarking Yellow hub", () => {
     const hiddenLore = getElement<HTMLDivElement>(root, "#pixel-lore");
 
     expect(hiddenLore.hidden).toBe(true);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("false");
 
     pixelTrigger.click();
 
     expect(hiddenLore.hidden).toBe(false);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("true");
 
     pixelTrigger.click();
 
     expect(hiddenLore.hidden).toBe(true);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("false");
   });
 
   it("blocks encoding before a PNG is loaded so an empty canvas cannot be exported", () => {
@@ -96,6 +96,6 @@ describe("Darglarking Yellow hub", () => {
     expect(status.textContent).toBe("Canvas is unavailable in this browser.");
     expect(status.dataset.variant).toBe("error");
     expect(hiddenLore.hidden).toBe(true);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("false");
   });
 });
