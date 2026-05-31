@@ -6,6 +6,7 @@ import type { PhantomSDKConfig } from "@phantom/react-sdk";
 import App from "./App";
 import { ConvexAuthProvider, hasConvexAuth } from "./ConvexAuthProvider";
 import { renderDarglarkingHub } from "./darglarkingHub";
+import { shouldRenderDarglarkingHub } from "./routing";
 import "./styles.css";
 
 const rootElement = document.getElementById("root");
@@ -15,12 +16,8 @@ if (!rootElement) {
 }
 
 const url = new URL(window.location.href);
-const shouldRenderDarglarkingHub =
-  url.pathname === "/darglarking-yellow" ||
-  url.searchParams.get("view") === "darglarking-yellow" ||
-  url.hash === "#darglarking-yellow";
 
-if (shouldRenderDarglarkingHub) {
+if (shouldRenderDarglarkingHub(url)) {
   document.body.classList.add("dy-page");
   document.title = "The Darglarking Yellow";
   renderDarglarkingHub(rootElement);
