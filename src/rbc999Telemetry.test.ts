@@ -29,6 +29,14 @@ describe("RBC-999 telemetry models", () => {
     expect(result.sandbox).toBeNull();
   });
 
+  it("keeps the Rails-Thorne guard nominal at the critical acceleration boundary", () => {
+    const result = evaluateRailsThorneGuard({ stressVelocity: 0.88, companionLoad: 0.75, entityInstability: 0.64 });
+
+    expect(result.status).toBe("nominal");
+    expect(result.forceField).toBeNull();
+    expect(result.sandbox).toBeNull();
+  });
+
   it("injects reverse force and sandbox constraints when stress velocity is critical", () => {
     const result = evaluateRailsThorneGuard({ stressVelocity: 0.96, companionLoad: 0.75, entityInstability: 0.64 });
 
@@ -124,5 +132,25 @@ describe("RBC-999 telemetry models", () => {
     expect(released.velocity.x).toBeCloseTo(-113.14, 2);
     expect(released.velocity.y).toBeCloseTo(-113.14, 2);
     expect(released.state).toBe("friction-slowdown");
+  });
+
+  it("returns hub movement to idle after friction consumes released velocity", () => {
+    const noInput = { left: false, right: false, up: false, down: false };
+    let movement = simulateHubMovement({
+      input: { left: true, right: false, up: false, down: false },
+      previousVelocity: { x: 0, y: 0 },
+      speed: 200,
+    });
+
+    for (let step = 0; step < 5; step += 1) {
+      movement = simulateHubMovement({
+        input: noInput,
+        previousVelocity: movement.velocity,
+        speed: 200,
+      });
+    }
+
+    expect(movement.velocity).toEqual({ x: 0, y: 0 });
+    expect(movement.state).toBe("idle");
   });
 });
