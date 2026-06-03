@@ -19,6 +19,8 @@ describe("Darglarking Yellow hub", () => {
   }
 
   it("toggles the hidden pixel transcript and keeps aria-expanded synchronized", () => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as CanvasRenderingContext2D);
+
     const root = renderHub();
     const pixelTrigger = root.querySelector<HTMLButtonElement>(".dy-pixel-trigger");
     const hiddenLore = root.querySelector<HTMLDivElement>("#pixel-lore");
@@ -50,6 +52,8 @@ describe("Darglarking Yellow hub", () => {
   });
 
   it("rejects non-PNG uploads before attempting to read image data", () => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as CanvasRenderingContext2D);
+
     const root = renderHub();
     const fileInput = root.querySelector<HTMLInputElement>(".dy-file-input");
     const status = root.querySelector<HTMLParagraphElement>(".dy-stego-status");
