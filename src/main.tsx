@@ -14,6 +14,7 @@ if (!root) {
   throw new Error("Missing root element for Shadow Chamber Command.");
 }
 
+const rootElement = root;
 const phantomAppId = import.meta.env.VITE_PHANTOM_APP_ID?.trim();
 const convexUrl = import.meta.env.VITE_CONVEX_URL?.trim();
 const redirectUrl =
@@ -48,10 +49,10 @@ const app = (
 let reactRoot: ReturnType<typeof createRoot> | null = null;
 
 function renderDefaultApp() {
-  root.classList.remove("dy-root");
+  rootElement.classList.remove("dy-root");
 
   if (!reactRoot) {
-    reactRoot = createRoot(root);
+    reactRoot = createRoot(rootElement);
   }
 
   reactRoot.render(
@@ -64,8 +65,8 @@ function renderDefaultApp() {
 function renderDarglarkingArchive() {
   reactRoot?.unmount();
   reactRoot = null;
-  root.classList.add("dy-root");
-  renderDarglarkingHub(root);
+  rootElement.classList.add("dy-root");
+  renderDarglarkingHub(rootElement);
 }
 
 function renderCurrentRoute() {
