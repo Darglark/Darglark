@@ -237,6 +237,9 @@ export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redi
             ) : (
               <span className="env-pill">Extension mode: no Portal appId required</span>
             )}
+            <a className="ghost-button utility-link" href="#darglarking-yellow">
+              Open Darglarking Yellow Archive
+            </a>
           </div>
         </div>
         <div className="scanner-card" aria-label="Campaign readiness">
