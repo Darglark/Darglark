@@ -1,4 +1,4 @@
-import { decodeMessageFromPixels, embedMessageInPixels } from "./steganography";
+import { assertStegoImageDimensions, decodeMessageFromPixels, embedMessageInPixels } from "./steganography";
 
 const ARCHIVE_URL =
   "https://web.archive.org/web/20131127040404/https://darglarking-yellow.invalid/archive/case-044-yellow-room.html";
@@ -196,6 +196,7 @@ export function renderDarglarkingHub(root: HTMLElement) {
 
     try {
       const image = await readImageFile(file);
+      assertStegoImageDimensions(image.naturalWidth, image.naturalHeight);
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
       context.clearRect(0, 0, canvas.width, canvas.height);

@@ -1,5 +1,6 @@
-import { mutationGeneric as mutation, queryGeneric as query } from "convex/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { getCurrentUser } from "./lib/auth";
 
 export const list = query({
   args: {},
@@ -15,6 +16,8 @@ export const create = mutation({
     protocol: v.string(),
   },
   handler: async (ctx, args) => {
+    await getCurrentUser(ctx);
+
     const title = args.title.trim();
 
     if (!title) {
@@ -37,6 +40,8 @@ export const setCompleted = mutation({
     completed: v.boolean(),
   },
   handler: async (ctx, args) => {
+    await getCurrentUser(ctx);
+
     await ctx.db.patch(args.briefingId, {
       completed: args.completed,
     });
@@ -48,6 +53,8 @@ export const remove = mutation({
     briefingId: v.id("commandBriefings"),
   },
   handler: async (ctx, args) => {
+    await getCurrentUser(ctx);
+
     await ctx.db.delete(args.briefingId);
   },
 });

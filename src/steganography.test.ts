@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { decodeMessageFromPixels, embedMessageInPixels } from "./steganography";
+import {
+  assertStegoImageDimensions,
+  decodeMessageFromPixels,
+  embedMessageInPixels,
+  MAX_STEGO_IMAGE_PIXELS,
+} from "./steganography";
 
 describe("LSB steganography encoder", () => {
   it("embeds and decodes a message using RGB least significant bits while preserving alpha", () => {
@@ -47,5 +52,11 @@ describe("LSB steganography encoder", () => {
     const corrupted = new Uint8ClampedArray(40).fill(0);
 
     expect(() => decodeMessageFromPixels(corrupted)).toThrow("Encoded payload is incomplete");
+  });
+
+  it("rejects oversized images before allocating full-canvas pixel buffers", () => {
+    expect(() => assertStegoImageDimensions(MAX_STEGO_IMAGE_PIXELS + 1, 1)).toThrow(
+      "Selected PNG is too large",
+    );
   });
 });
