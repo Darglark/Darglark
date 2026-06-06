@@ -87,17 +87,17 @@ describe("Darglarking Yellow browser hub", () => {
     const hiddenLore = getHubElement<HTMLDivElement>(root, "#pixel-lore");
 
     expect(hiddenLore.hidden).toBe(true);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("false");
 
     pixelTrigger.click();
 
     expect(hiddenLore.hidden).toBe(false);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("true");
 
     pixelTrigger.click();
 
     expect(hiddenLore.hidden).toBe(true);
-    expect(pixelTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(pixelTrigger.getAttribute("aria-expanded")).toBe("false");
   });
 
   it("keeps steganography output locked until a PNG asset is loaded", () => {
