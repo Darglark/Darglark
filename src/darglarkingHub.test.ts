@@ -65,7 +65,7 @@ describe("Darglarking Yellow browser hub", () => {
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
       clearRect: vi.fn(),
       drawImage: vi.fn(),
-      getImageData: vi.fn(() => new ImageData(pixels, 10, 10)),
+      getImageData: vi.fn(() => new ImageData(pixels as unknown as ImageDataArray, 10, 10)),
       putImageData: vi.fn((imageData: ImageData) => {
         pixels = new Uint8ClampedArray(imageData.data);
       }),
