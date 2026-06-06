@@ -42,6 +42,11 @@ describe("application entrypoint", () => {
     vi.stubGlobal("document", {
       getElementById: vi.fn(() => rootElement),
     });
+    vi.stubGlobal("window", {
+      location: {
+        origin: "https://example.test",
+      },
+    });
 
     await import("./main");
 
