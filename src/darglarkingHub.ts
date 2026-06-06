@@ -2,6 +2,8 @@ import { decodeMessageFromPixels, embedMessageInPixels } from "./steganography";
 
 const ARCHIVE_URL =
   "https://web.archive.org/web/20131127040404/https://darglarking-yellow.invalid/archive/case-044-yellow-room.html";
+const MAX_PNG_FILE_BYTES = 8 * 1024 * 1024;
+const MAX_IMAGE_PIXELS = 4_000_000;
 
 function getElement<T extends HTMLElement>(root: ParentNode, selector: string) {
   const element = root.querySelector<T>(selector);
@@ -37,7 +39,7 @@ function setStatus(status: HTMLElement, message: string, variant: "idle" | "succ
 
 export function renderDarglarkingHub(root: HTMLElement) {
   root.innerHTML = `
-    <main class="dy-shell">
+    <div class="dy-shell">
       <section class="dy-hero" aria-labelledby="dy-title">
         <div class="dy-case-stamp">SCP-DY / INTAKE MEMO / LEVEL 0.44</div>
         <p class="dy-eyebrow">The Darglarking Yellow</p>
@@ -152,7 +154,7 @@ export function renderDarglarkingHub(root: HTMLElement) {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   `;
 
   const pixelTrigger = getElement<HTMLButtonElement>(root, ".dy-pixel-trigger");
@@ -194,8 +196,20 @@ export function renderDarglarkingHub(root: HTMLElement) {
       return;
     }
 
+    if (file.size > MAX_PNG_FILE_BYTES) {
+      setStatus(status, "Select a PNG under 8 MB so encoding can stay responsive in the browser.", "error");
+      return;
+    }
+
     try {
       const image = await readImageFile(file);
+      const imagePixels = image.naturalWidth * image.naturalHeight;
+
+      if (imagePixels > MAX_IMAGE_PIXELS) {
+        setStatus(status, "Select a PNG under 4 megapixels so encoding can stay responsive in the browser.", "error");
+        return;
+      }
+
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
       context.clearRect(0, 0, canvas.width, canvas.height);

@@ -10,6 +10,7 @@ import {
 } from "@phantom/react-sdk";
 import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
 import { AuthStatus } from "./AuthStatus";
+import { DarglarkingHubPanel } from "./DarglarkingHubPanel";
 import { RailsThorneGuardPanel } from "./RailsThorneGuardPanel";
 import { RougeTileStatsPanel } from "./RougeTileStatsPanel";
 
@@ -402,6 +403,8 @@ export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redi
       ) : (
         <ConvexSetupPanel />
       )}
+
+      <DarglarkingHubPanel />
     </main>
   );
 }
