@@ -2,16 +2,18 @@ const LENGTH_PREFIX_BITS = 32;
 const CHANNELS_PER_PIXEL = 4;
 const ALPHA_CHANNEL_OFFSET = 3;
 
-function getWritableChannelIndexes(pixelCount: number) {
-  const indexes: number[] = [];
+function getWritableChannelCount(channelCount: number) {
+  const fullPixelCount = Math.floor(channelCount / CHANNELS_PER_PIXEL);
+  const remainingChannels = channelCount % CHANNELS_PER_PIXEL;
 
-  for (let index = 0; index < pixelCount; index += 1) {
-    if (index % CHANNELS_PER_PIXEL !== ALPHA_CHANNEL_OFFSET) {
-      indexes.push(index);
-    }
-  }
+  return fullPixelCount * ALPHA_CHANNEL_OFFSET + Math.min(remainingChannels, ALPHA_CHANNEL_OFFSET);
+}
 
-  return indexes;
+function getWritableChannelIndex(bitIndex: number) {
+  const pixelIndex = Math.floor(bitIndex / ALPHA_CHANNEL_OFFSET);
+  const channelOffset = bitIndex % ALPHA_CHANNEL_OFFSET;
+
+  return pixelIndex * CHANNELS_PER_PIXEL + channelOffset;
 }
 
 function numberToBits(value: number, bitCount: number) {
@@ -43,16 +45,16 @@ function bitsToBytes(bits: number[]) {
 export function embedMessageInPixels(pixels: Uint8ClampedArray, message: string) {
   const messageBytes = new TextEncoder().encode(message);
   const payloadBits = [...numberToBits(messageBytes.length, LENGTH_PREFIX_BITS), ...bytesToBits(messageBytes)];
-  const writableIndexes = getWritableChannelIndexes(pixels.length);
+  const writableChannelCount = getWritableChannelCount(pixels.length);
 
-  if (payloadBits.length > writableIndexes.length) {
+  if (payloadBits.length > writableChannelCount) {
     throw new Error("Secret message is too large for the selected image.");
   }
 
   const encodedPixels = new Uint8ClampedArray(pixels);
 
   payloadBits.forEach((bit, payloadIndex) => {
-    const pixelIndex = writableIndexes[payloadIndex];
+    const pixelIndex = getWritableChannelIndex(payloadIndex);
     encodedPixels[pixelIndex] = (encodedPixels[pixelIndex] & 0xfe) | bit;
   });
 
@@ -60,23 +62,27 @@ export function embedMessageInPixels(pixels: Uint8ClampedArray, message: string)
 }
 
 export function decodeMessageFromPixels(pixels: Uint8ClampedArray) {
-  const writableIndexes = getWritableChannelIndexes(pixels.length);
+  const writableChannelCount = getWritableChannelCount(pixels.length);
 
-  if (writableIndexes.length < LENGTH_PREFIX_BITS) {
+  if (writableChannelCount < LENGTH_PREFIX_BITS) {
     throw new Error("Encoded payload is incomplete.");
   }
 
-  const lengthBits = writableIndexes.slice(0, LENGTH_PREFIX_BITS).map((pixelIndex) => pixels[pixelIndex] & 1);
+  const lengthBits = Array.from(
+    { length: LENGTH_PREFIX_BITS },
+    (_, bitIndex) => pixels[getWritableChannelIndex(bitIndex)] & 1,
+  );
   const messageByteLength = bitsToNumber(lengthBits);
   const messageBitLength = messageByteLength * 8;
 
-  if (messageBitLength > writableIndexes.length - LENGTH_PREFIX_BITS) {
+  if (messageBitLength > writableChannelCount - LENGTH_PREFIX_BITS) {
     throw new Error("Encoded payload is incomplete.");
   }
 
-  const messageBits = writableIndexes
-    .slice(LENGTH_PREFIX_BITS, LENGTH_PREFIX_BITS + messageBitLength)
-    .map((pixelIndex) => pixels[pixelIndex] & 1);
+  const messageBits = Array.from(
+    { length: messageBitLength },
+    (_, bitIndex) => pixels[getWritableChannelIndex(LENGTH_PREFIX_BITS + bitIndex)] & 1,
+  );
 
   return new TextDecoder().decode(bitsToBytes(messageBits));
 }

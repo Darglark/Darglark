@@ -29,6 +29,12 @@ describe("LSB steganography encoder", () => {
     expect(() => embedMessageInPixels(tiny, "TOO-LARGE")).toThrow("Secret message is too large");
   });
 
+  it("embeds a one-byte payload at the exact RGB channel capacity boundary", () => {
+    const boundary = new Uint8ClampedArray(56).fill(170);
+
+    expect(decodeMessageFromPixels(embedMessageInPixels(boundary, "A"))).toBe("A");
+  });
+
   it("throws when an encoded payload length exceeds the available RGB channels", () => {
     const corrupted = new Uint8ClampedArray(48).fill(0);
     corrupted[41] = 1;
