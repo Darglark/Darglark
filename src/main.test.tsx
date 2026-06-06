@@ -38,10 +38,10 @@ describe("application entrypoint", () => {
   });
 
   it("mounts the React commander app instead of replacing the root with standalone DOM content", async () => {
-    const rootElement = document.createElement("div");
-    rootElement.id = "root";
-    document.body.innerHTML = "";
-    document.body.append(rootElement);
+    const rootElement = { id: "root" } as HTMLElement;
+    vi.stubGlobal("document", {
+      getElementById: vi.fn(() => rootElement),
+    });
 
     await import("./main");
 
