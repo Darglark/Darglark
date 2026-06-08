@@ -1,32 +1,49 @@
-# Shadow Chamber Command
+# The Darglarking Yellow
 
-A Vite + React + TypeScript single-page app for XCOM 2: War of the Chosen strategy recommendations.
-It integrates Phantom Connect for Solana-only commander identity signing.
+A Vite + React + TypeScript project whose current browser entrypoint renders a vanilla DOM meta-narrative hub for
+The Darglarking Yellow. The mounted runtime is `src/main.tsx` -> `src/darglarkingHub.ts`; the older React
+XCOM/Phantom command UI still exists in `src/App.tsx`, but `src/main.tsx` does not mount it today.
 
-## Features
+## Current Runtime
 
-- Phantom extension/injected provider is the default path and does not require a Phantom Portal appId.
-- Optional Phantom Portal/social login support is enabled when `VITE_PHANTOM_APP_ID` is set.
-- Optional Convex + WorkOS AuthKit support syncs authenticated users into a protected `users` table.
-- Commander profile signing uses `TextEncoder` and `solana.signMessage`; it never requests transactions or private keys.
-- The strategy UI is fully readable and testable without a wallet.
-- Wallet connect, disconnect, and signing flows use async `try/catch` and surface rejection/error messages in the UI.
+- `src/darglarkingHub.ts` replaces `#root` with the Darglarking dossier, hidden transcript, broken archive link,
+  and client-side PNG steganography tool.
+- `src/steganography.ts` embeds a UTF-8 message into the least significant bits of RGB channels only. Alpha values
+  are preserved, and a 32-bit payload length prefix is decoded before reading message bytes.
+- Encoding runs locally in the browser: upload a PNG, enter a short secret, click `Embed into LSBs`, and download
+  the generated lossless PNG.
+- The hub intentionally uses small hidden interactions: a one-pixel reveal button, selectable blank text, and an
+  archival link that opens outside the app.
+
+## Supporting Modules
+
+- `src/rbc999Telemetry.ts` models Rails-Thorne guard states, Node 044 identity checks, fractal samples, and hub
+  movement physics. It is covered by `src/rbc999Telemetry.test.ts`.
+- `src/rougeTileStats.ts` formats Rouge Tile Defense stats and achievement thresholds. It is covered by
+  `src/rougeTileStats.test.ts`.
+- `generate_volatility_paradox.py` builds a 32-bar MIDI file at `assets/volatility_paradox.mid` when run directly.
+- `src/App.tsx`, `src/ConvexBriefings.tsx`, `src/ConvexAuthProvider.tsx`, and `convex/` contain the optional
+  XCOM/Phantom/Convex command app modules. They are not part of the currently mounted page unless `src/main.tsx`
+  is changed to render them.
 
 ## Setup
 
 ```bash
 npm install
 cp .env.example .env
-npx convex dev
 npm run dev
 ```
 
-Open the printed local Vite URL in a browser. Without Phantom env vars, the app runs in extension-only mode.
-Without `VITE_CONVEX_URL`, the shared briefing panel shows setup instructions instead of live data.
+Open the printed local Vite URL in a browser. No environment variables are required for the current Darglarking hub.
 
-## Optional Convex live backend
+## Optional Command App Environment
 
-Run the Convex development server and copy the deployment URL into `.env`:
+These variables are only used by the optional React command app modules. Set them if you intentionally remount
+`src/App.tsx` and want to test Phantom Portal, Convex briefings, or WorkOS AuthKit roster sync.
+
+### Convex live backend
+
+Run the Convex development server and copy the generated deployment URL into `.env`:
 
 ```bash
 npx convex dev
@@ -34,10 +51,11 @@ VITE_CONVEX_URL=https://your-deployment.convex.cloud
 ```
 
 The app includes a Convex schema and CRUD functions for `commandBriefings`. Once `VITE_CONVEX_URL`
-is set, the command briefing panel lists, creates, completes, and deletes live shared strategy notes.
+is set and the React command app is mounted, the command briefing panel lists, creates, completes, and deletes live
+shared strategy notes.
 Use `npx convex dev` for development; reserve `npx convex deploy` for production deployment.
 
-## Optional Phantom Portal / social providers
+### Phantom Portal / social providers
 
 Set these only when you have a Phantom Portal app:
 
@@ -54,7 +72,7 @@ ${window.location.origin}/auth/phantom/callback
 
 Add the redirect URL to the Phantom Portal allowlist before testing Google or Apple sign-in.
 
-## Optional Convex AuthKit roster
+### Convex AuthKit roster
 
 Run `npx convex dev` to create the Convex deployment and generate `VITE_CONVEX_URL`. The `convex/` backend defines:
 
@@ -80,25 +98,22 @@ npx convex env set WORKOS_API_KEY sk_your_api_key
 ## Verification commands
 
 ```bash
-npx convex codegen --typecheck disable
+npm test
 npm run build
 npm run dev
-npx convex dev
 ```
 
 Manual checks:
 
-1. Load the app with no wallet connected and confirm all XCOM strategy panels render.
-2. Click tactical doctrine cards and confirm the selected card updates.
-3. Click `Sign Commander Identity` before connecting and confirm the UI shows a helpful error.
-4. Without `VITE_CONVEX_URL`, confirm the Convex quickstart panel shows setup instructions.
-5. With `VITE_CONVEX_URL` set, add, complete, and delete a shared command briefing.
-6. With Phantom extension installed, click `Connect Phantom Extension`, approve the connection, then click `Sign Commander Identity`.
-7. Reject a signature request once and confirm the rejection is shown gracefully.
-4. With Phantom extension installed, click `Connect Phantom Extension`, approve the connection, then click `Sign Commander Identity`.
-5. Reject a signature request once and confirm the rejection is shown gracefully.
-6. With Convex and WorkOS env vars set, sign in and confirm the Convex roster panel reports that the authenticated user is linked.
+1. Load the Vite URL and confirm the Darglarking dossier renders without env vars.
+2. Click the one-pixel trigger after Addendum 044-A and confirm Addendum 044-B appears.
+3. Select the blank note in the Hidden layers panel and confirm suppressed text is visually revealable.
+4. Try a non-PNG upload and confirm the steganography status asks for a lossless PNG.
+5. Upload a PNG, click `Embed into LSBs`, and confirm the status shows the decoded secret plus a download link.
+6. If you remount `src/App.tsx`, repeat the Phantom, Convex, and WorkOS checks for the optional command app modules.
 
 ## Phantom safety notes
 
-This app only signs a message to establish a commander identity/profile. It does not build, sign, or send Solana transactions, and it does not handle private keys. The implementation is devnet-friendly because it performs no chain writes and never touches mainnet funds.
+The optional React command app only signs a message to establish a commander identity/profile. It does not build,
+sign, or send Solana transactions, and it does not handle private keys. The implementation is devnet-friendly because
+it performs no chain writes and never touches mainnet funds.
