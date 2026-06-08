@@ -444,3 +444,729 @@ h2 {
     animation: none;
   }
 }
+
+body.strategy-surface {
+  color: #edf7ff;
+  background:
+    radial-gradient(circle at top left, rgba(79, 240, 183, 0.2), transparent 28rem),
+    radial-gradient(circle at 80% 10%, rgba(110, 231, 255, 0.14), transparent 22rem),
+    linear-gradient(135deg, #071016 0%, #101820 52%, #17101d 100%);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --app-panel: rgba(10, 22, 31, 0.82);
+  --app-panel-strong: rgba(15, 34, 47, 0.92);
+  --app-line: rgba(134, 218, 255, 0.18);
+  --app-cyan: #6ee7ff;
+  --app-teal: #4ff0b7;
+  --app-orange: #ffb86b;
+  --app-red: #ff6b7a;
+  --app-muted: #9bb2c2;
+}
+
+body.strategy-surface::before {
+  content: none;
+}
+
+.strategy-surface .app-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0;
+}
+
+.strategy-surface .hero-panel,
+.strategy-surface .panel {
+  border: 1px solid var(--app-line);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(18px);
+}
+
+.strategy-surface .hero-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: stretch;
+  min-height: 430px;
+  padding: 36px;
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, rgba(7, 16, 22, 0.84), rgba(15, 35, 49, 0.78)),
+    repeating-linear-gradient(90deg, transparent 0 34px, rgba(110, 231, 255, 0.03) 34px 35px);
+}
+
+.strategy-surface .hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.strategy-surface .eyebrow {
+  margin: 0 0 10px;
+  color: var(--app-teal);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.strategy-surface h1,
+.strategy-surface h2,
+.strategy-surface h3,
+.strategy-surface p {
+  margin-top: 0;
+}
+
+.strategy-surface h1 {
+  max-width: 760px;
+  margin-bottom: 16px;
+  color: #edf7ff;
+  font-size: clamp(3rem, 8vw, 6.7rem);
+  line-height: 0.85;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.strategy-surface h2 {
+  margin-bottom: 0;
+  color: #edf7ff;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.04;
+}
+
+.strategy-surface h3 {
+  margin-bottom: 12px;
+  color: #edf7ff;
+  font-size: 1.28rem;
+}
+
+.strategy-surface .hero-copy > p:not(.eyebrow) {
+  max-width: 670px;
+  color: #c6d8e5;
+  font-size: 1.12rem;
+}
+
+.strategy-surface .hero-actions,
+.strategy-surface .profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.strategy-surface .primary-button,
+.strategy-surface .secondary-button,
+.strategy-surface .ghost-button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #041015;
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.strategy-surface .primary-button {
+  background: linear-gradient(135deg, var(--app-cyan), var(--app-teal));
+}
+
+.strategy-surface .secondary-button,
+.strategy-surface .ghost-button {
+  border: 1px solid rgba(110, 231, 255, 0.3);
+  color: #dff8ff;
+  background: rgba(110, 231, 255, 0.08);
+}
+
+.strategy-surface .ghost-button {
+  color: #b8d6e5;
+  background: transparent;
+}
+
+.strategy-surface .primary-button:hover,
+.strategy-surface .secondary-button:hover,
+.strategy-surface .ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.strategy-surface .primary-button:focus-visible,
+.strategy-surface .secondary-button:focus-visible,
+.strategy-surface .ghost-button:focus-visible,
+.strategy-surface .doctrine-card:focus-visible,
+.strategy-surface .protocol-card:focus-visible {
+  outline: 3px solid rgba(110, 231, 255, 0.72);
+  outline-offset: 3px;
+}
+
+.strategy-surface .primary-button:disabled,
+.strategy-surface .ghost-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.strategy-surface .env-pill {
+  padding: 10px 14px;
+  border: 1px solid rgba(79, 240, 183, 0.24);
+  border-radius: 999px;
+  color: #bfffea;
+  background: rgba(79, 240, 183, 0.08);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.strategy-surface .scanner-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 320px;
+  overflow: hidden;
+  padding: 24px;
+  border: 1px solid rgba(110, 231, 255, 0.22);
+  border-radius: 26px;
+  background:
+    linear-gradient(rgba(110, 231, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 231, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(255, 184, 107, 0.18), transparent 48%),
+    #061119;
+  background-size:
+    100% 28px,
+    28px 100%,
+    auto,
+    auto;
+}
+
+.strategy-surface .scanner-line {
+  position: absolute;
+  inset: 20% 10%;
+  border: 1px solid rgba(79, 240, 183, 0.32);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(79, 240, 183, 0.18);
+}
+
+.strategy-surface .scanner-card p,
+.strategy-surface .scanner-card span:last-child,
+.strategy-surface .muted {
+  color: var(--app-muted);
+}
+
+.strategy-surface .scanner-card strong {
+  margin-bottom: 8px;
+  color: var(--app-orange);
+  font-size: 1.8rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.strategy-surface .status-grid,
+.strategy-surface .recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.strategy-surface .recommendation-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.strategy-surface .panel {
+  padding: 24px;
+  border-radius: 24px;
+  background: var(--app-panel);
+}
+
+.strategy-surface .panel-heading {
+  margin-bottom: 22px;
+}
+
+.strategy-surface .profile-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.strategy-surface .profile-list div {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(134, 218, 255, 0.12);
+}
+
+.strategy-surface .profile-list dt {
+  color: var(--app-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.strategy-surface .profile-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #eefaff;
+}
+
+.strategy-surface .error-banner {
+  margin: 18px 0 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 107, 122, 0.38);
+  border-radius: 16px;
+  color: #ffd6db;
+  background: rgba(255, 107, 122, 0.1);
+}
+
+.strategy-surface .signature-box,
+.strategy-surface .chosen-list,
+.strategy-surface .rouge-stat-list,
+.strategy-surface .rouge-stat-controls,
+.strategy-surface .achievement-hook,
+.strategy-surface .briefing-list {
+  display: grid;
+}
+
+.strategy-surface .signature-box {
+  gap: 12px;
+}
+
+.strategy-surface .signature-box code {
+  max-height: 124px;
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid rgba(79, 240, 183, 0.18);
+  border-radius: 16px;
+  color: #dffcef;
+  background: rgba(0, 0, 0, 0.28);
+  overflow-wrap: anywhere;
+}
+
+.strategy-surface .signature-box span {
+  color: var(--app-muted);
+}
+
+.strategy-surface .doctrine-panel,
+.strategy-surface .education-panel,
+.strategy-surface .rails-thorne-panel,
+.strategy-surface .rouge-stats-panel,
+.strategy-surface .chosen-panel,
+.strategy-surface .convex-panel {
+  margin-top: 18px;
+}
+
+.strategy-surface .doctrine-options,
+.strategy-surface .protocol-options,
+.strategy-surface .chosen-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.strategy-surface .doctrine-card,
+.strategy-surface .protocol-card {
+  padding: 18px;
+  border: 1px solid rgba(134, 218, 255, 0.14);
+  border-radius: 20px;
+  color: #edf7ff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.strategy-surface .doctrine-card {
+  min-height: 190px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.strategy-surface .doctrine-card.active {
+  border-color: rgba(79, 240, 183, 0.72);
+  background: linear-gradient(135deg, rgba(79, 240, 183, 0.16), rgba(110, 231, 255, 0.08));
+}
+
+.strategy-surface .doctrine-card span,
+.strategy-surface .lineup {
+  color: var(--app-orange);
+  font-size: 0.83rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.strategy-surface .doctrine-card strong {
+  display: block;
+  margin: 10px 0;
+  font-size: 1.12rem;
+}
+
+.strategy-surface .doctrine-card p,
+.strategy-surface .protocol-card p,
+.strategy-surface .protocol-briefing p,
+.strategy-surface .protocol-checklist,
+.strategy-surface .squad-card p:not(.eyebrow),
+.strategy-surface .chosen-list p {
+  color: #c5d7e2;
+}
+
+.strategy-surface .education-layout,
+.strategy-surface .rbc-layout,
+.strategy-surface .rouge-stats-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.strategy-surface .rbc-layout {
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+}
+
+.strategy-surface .rouge-stats-layout {
+  grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1fr);
+}
+
+.strategy-surface .protocol-card {
+  display: grid;
+  gap: 10px;
+  min-height: 214px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+    rgba(255, 255, 255, 0.028);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.strategy-surface .protocol-card:hover {
+  transform: translateY(-2px);
+}
+
+.strategy-surface .protocol-card.active {
+  border-color: rgba(255, 184, 107, 0.76);
+  background: linear-gradient(135deg, rgba(255, 184, 107, 0.18), rgba(79, 240, 183, 0.08));
+}
+
+.strategy-surface .protocol-card span,
+.strategy-surface .protocol-code {
+  color: var(--app-orange);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.strategy-surface .protocol-card span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 184, 107, 0.38);
+  border-radius: 50%;
+  background: rgba(255, 184, 107, 0.1);
+}
+
+.strategy-surface .protocol-card strong {
+  font-size: 1.1rem;
+}
+
+.strategy-surface .protocol-briefing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid rgba(79, 240, 183, 0.2);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(79, 240, 183, 0.16), transparent 16rem),
+    rgba(0, 0, 0, 0.2);
+}
+
+.strategy-surface .protocol-checklist {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+
+.strategy-surface .squad-card,
+.strategy-surface .rouge-stats-panel {
+  background: var(--app-panel-strong);
+}
+
+.strategy-surface .chosen-list p {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(255, 184, 107, 0.18);
+  border-radius: 18px;
+  background: rgba(255, 184, 107, 0.07);
+}
+
+.strategy-surface .rails-thorne-panel {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(255, 184, 107, 0.12), transparent 22rem),
+    var(--app-panel);
+}
+
+.strategy-surface .rails-thorne-panel.override {
+  border-color: rgba(255, 184, 107, 0.48);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.34),
+    0 0 44px rgba(255, 184, 107, 0.08);
+}
+
+.strategy-surface .rbc-canvas {
+  width: 100%;
+  min-height: 340px;
+  border: 1px solid rgba(110, 231, 255, 0.16);
+  border-radius: 22px;
+  background: #03090e;
+  filter: saturate(1.2);
+}
+
+.strategy-surface .rbc-readout,
+.strategy-surface .telemetry-list {
+  display: grid;
+  gap: 16px;
+}
+
+.strategy-surface .telemetry-list {
+  gap: 10px;
+  margin: 0;
+}
+
+.strategy-surface .guard-status {
+  padding: 18px;
+  border: 1px solid rgba(255, 184, 107, 0.22);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(255, 184, 107, 0.14), rgba(79, 240, 183, 0.06)),
+    rgba(0, 0, 0, 0.18);
+}
+
+.strategy-surface .guard-status span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #ffdfb8;
+  background: rgba(255, 184, 107, 0.12);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.strategy-surface .guard-status strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff4e6;
+  font-size: 1.35rem;
+  line-height: 1.05;
+}
+
+.strategy-surface .guard-status p {
+  margin: 0;
+  color: #d9c7ad;
+}
+
+.strategy-surface .telemetry-list div {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(134, 218, 255, 0.1);
+}
+
+.strategy-surface .telemetry-list dt {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.strategy-surface .telemetry-list dd {
+  max-width: 56%;
+  margin: 0;
+  color: #eefaff;
+  text-align: right;
+}
+
+.strategy-surface .rouge-stats-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 102, 0, 0.1), rgba(58, 0, 115, 0.08)),
+    var(--app-panel-strong);
+}
+
+.strategy-surface .rouge-stat-list,
+.strategy-surface .rouge-stat-controls,
+.strategy-surface .achievement-hook {
+  gap: 10px;
+}
+
+.strategy-surface .rouge-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 102, 0, 0.22);
+  border-radius: 18px;
+  background: rgba(255, 102, 0, 0.07);
+}
+
+.strategy-surface .rouge-stat-row span,
+.strategy-surface .achievement-hook span {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.strategy-surface .rouge-stat-row span {
+  color: #ffcfb0;
+}
+
+.strategy-surface .rouge-stat-row strong {
+  color: #ff6600;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.strategy-surface .rouge-stat-controls {
+  gap: 16px;
+  align-content: start;
+}
+
+.strategy-surface .rouge-stat-controls > p {
+  margin: 0;
+  color: #d8c6ba;
+}
+
+.strategy-surface .rouge-action-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.strategy-surface .achievement-hook {
+  padding: 16px;
+  border: 1px solid rgba(110, 231, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.strategy-surface .achievement-hook code {
+  color: #dffcef;
+  overflow-wrap: anywhere;
+}
+
+.strategy-surface .briefing-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.strategy-surface .briefing-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--app-muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.strategy-surface .briefing-form input {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(134, 218, 255, 0.22);
+  border-radius: 14px;
+  color: #eefaff;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.strategy-surface .briefing-list {
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.strategy-surface .briefing-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  border: 1px solid rgba(134, 218, 255, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.strategy-surface .briefing-item label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.strategy-surface .briefing-item span {
+  display: grid;
+  gap: 4px;
+}
+
+.strategy-surface .briefing-item small,
+.strategy-surface .briefing-item.completed strong {
+  color: var(--app-muted);
+}
+
+.strategy-surface .briefing-item.completed strong {
+  text-decoration: line-through;
+}
+
+@media (max-width: 880px) {
+  .strategy-surface .hero-panel,
+  .strategy-surface .status-grid,
+  .strategy-surface .recommendation-grid,
+  .strategy-surface .doctrine-options,
+  .strategy-surface .education-layout,
+  .strategy-surface .rbc-layout,
+  .strategy-surface .rouge-stats-layout,
+  .strategy-surface .protocol-options,
+  .strategy-surface .chosen-list {
+    grid-template-columns: 1fr;
+  }
+
+  .strategy-surface .hero-panel {
+    padding: 24px;
+  }
+
+  .strategy-surface .briefing-form {
+    grid-template-columns: 1fr;
+  }
+
+  .strategy-surface .scanner-card {
+    min-height: 240px;
+  }
+
+  .strategy-surface .rbc-canvas {
+    min-height: 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strategy-surface .primary-button,
+  .strategy-surface .secondary-button,
+  .strategy-surface .ghost-button,
+  .strategy-surface .protocol-card {
+    transition-duration: 0.01ms;
+  }
+
+  .strategy-surface .protocol-card:hover {
+    transform: none;
+  }
+}
