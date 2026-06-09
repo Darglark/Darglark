@@ -166,18 +166,18 @@ export function renderDarglarkingHub(root: HTMLElement) {
   const canvas = getElement<HTMLCanvasElement>(root, ".dy-stego-canvas");
   const context = canvas.getContext("2d", { willReadFrequently: true });
 
+  pixelTrigger.addEventListener("click", () => {
+    const isHidden = hiddenLore.hidden;
+    hiddenLore.hidden = !isHidden;
+    pixelTrigger.setAttribute("aria-expanded", String(isHidden));
+  });
+
   if (!context) {
     setStatus(status, "Canvas is unavailable in this browser.", "error");
     return;
   }
 
   let hasLoadedPng = false;
-
-  pixelTrigger.addEventListener("click", () => {
-    const isHidden = hiddenLore.hidden;
-    hiddenLore.hidden = !isHidden;
-    pixelTrigger.setAttribute("aria-expanded", String(isHidden));
-  });
 
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files?.[0];
