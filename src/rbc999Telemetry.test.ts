@@ -29,6 +29,14 @@ describe("RBC-999 telemetry models", () => {
     expect(result.sandbox).toBeNull();
   });
 
+  it("keeps the Rails-Thorne guard nominal at the exact acceleration boundary", () => {
+    const result = evaluateRailsThorneGuard({ stressVelocity: 0.88, companionLoad: 0.34, entityInstability: 0.2 });
+
+    expect(result.status).toBe("nominal");
+    expect(result.forceField).toBeNull();
+    expect(result.sandbox).toBeNull();
+  });
+
   it("injects reverse force and sandbox constraints when stress velocity is critical", () => {
     const result = evaluateRailsThorneGuard({ stressVelocity: 0.96, companionLoad: 0.75, entityInstability: 0.64 });
 
@@ -56,6 +64,7 @@ describe("RBC-999 telemetry models", () => {
       heartbeatFrequency: 32.7,
     });
     expect(verifyIdentityNode([expectedResolution + 0.0001], 32.7).verified).toBe(false);
+    expect(verifyIdentityNode([], 32.7).verified).toBe(false);
   });
 
   it("samples a deterministic fractal signature from the identity ratio", () => {
@@ -124,5 +133,27 @@ describe("RBC-999 telemetry models", () => {
     expect(released.velocity.x).toBeCloseTo(-113.14, 2);
     expect(released.velocity.y).toBeCloseTo(-113.14, 2);
     expect(released.state).toBe("friction-slowdown");
+  });
+
+  it("treats opposing movement inputs and fully stopped velocity as idle", () => {
+    const opposedInput = simulateHubMovement({
+      input: { left: true, right: true, up: false, down: false },
+      previousVelocity: { x: 12, y: 0 },
+      speed: 200,
+    });
+    const fullyStopped = simulateHubMovement({
+      input: { left: false, right: false, up: false, down: false },
+      previousVelocity: { x: 8, y: 0 },
+      speed: 200,
+    });
+
+    expect(opposedInput).toEqual({
+      velocity: { x: 0, y: 0 },
+      state: "idle",
+    });
+    expect(fullyStopped).toEqual({
+      velocity: { x: 0, y: 0 },
+      state: "idle",
+    });
   });
 });

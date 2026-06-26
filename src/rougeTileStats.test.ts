@@ -27,6 +27,17 @@ describe("Rouge Tile Defense stat display engine", () => {
     ).toEqual(["ACH_THE_7654_WALL", "ACH_ANSWER_TO_EVERYTHING"]);
   });
 
+  it("does not report achievement unlocks just below stat thresholds", () => {
+    expect(
+      getRougeTileAchievements({
+        tiles_defended: 7_653,
+        waves_cleared: 41,
+        corruption_purged: 120,
+        bounty_level: 5,
+      }),
+    ).toEqual([]);
+  });
+
   it("updates a single stat without mutating the existing runtime dictionary", () => {
     const updated = updateRougeTileStat(DEFAULT_ROUGE_TILE_STATS, "tiles_defended", 25);
 

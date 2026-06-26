@@ -35,6 +35,13 @@ function setStatus(status: HTMLElement, message: string, variant: "idle" | "succ
   status.dataset.variant = variant;
 }
 
+export function encodeDarglarkingSecret(pixels: Uint8ClampedArray, secret: string) {
+  const encodedPixels = embedMessageInPixels(pixels, secret);
+  const decodedCheck = decodeMessageFromPixels(encodedPixels);
+
+  return { encodedPixels, decodedCheck };
+}
+
 export function renderDarglarkingHub(root: HTMLElement) {
   root.innerHTML = `
     <main class="dy-shell">
@@ -215,10 +222,9 @@ export function renderDarglarkingHub(root: HTMLElement) {
 
     try {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const encodedPixels = embedMessageInPixels(imageData.data, secretInput.value);
+      const { encodedPixels, decodedCheck } = encodeDarglarkingSecret(imageData.data, secretInput.value);
       const encodedImage = new ImageData(encodedPixels, imageData.width, imageData.height);
       context.putImageData(encodedImage, 0, 0);
-      const decodedCheck = decodeMessageFromPixels(encodedPixels);
 
       canvas.toBlob((blob) => {
         if (!blob) {
