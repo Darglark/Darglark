@@ -5,12 +5,15 @@ import { renderDarglarkingHub } from "./darglarkingHub";
 
 class MockImageData implements ImageData {
   readonly colorSpace: PredefinedColorSpace = "srgb";
+  readonly data: ImageDataArray;
+  readonly width: number;
+  readonly height: number;
 
-  constructor(
-    readonly data: Uint8ClampedArray,
-    readonly width: number,
-    readonly height: number,
-  ) {}
+  constructor(data: ImageDataArray, width: number, height: number) {
+    this.data = data;
+    this.width = width;
+    this.height = height;
+  }
 }
 
 class MockImage {
