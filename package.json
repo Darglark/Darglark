@@ -25,14 +25,14 @@
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "jsdom": "^29.1.1",
+    "happy-dom": "^20.10.6",
     "typescript": "^6.0.3",
     "vite": "^8.0.13",
     "vitest": "^4.1.7"
   },
   "overrides": {
     "axios": "1.16.1",
-    "ws": "8.20.1",
+    "ws": "8.21.0",
     "uuid": "14.0.0"
   }
 }
