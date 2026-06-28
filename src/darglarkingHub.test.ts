@@ -145,7 +145,7 @@ describe("Darglarking Yellow hub", () => {
 
     getElement<HTMLButtonElement>(root, ".dy-encode-button").click();
 
-    expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status")).toHaveTextContent("Upload a PNG before embedding a code.");
+    expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status").textContent).toBe("Upload a PNG before embedding a code.");
     expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status").dataset.variant).toBe("error");
     expect(getElement<HTMLAnchorElement>(root, ".dy-download-link").hidden).toBe(true);
     expect(latestCanvasContext?.context.getImageData).not.toHaveBeenCalled();
@@ -159,7 +159,7 @@ describe("Darglarking Yellow hub", () => {
     fileInput.dispatchEvent(new Event("change"));
     await flushMicrotasks();
 
-    expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status")).toHaveTextContent(
+    expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status").textContent).toBe(
       "Select a PNG asset so the encoded output remains lossless.",
     );
     expect(getElement<HTMLParagraphElement>(root, ".dy-stego-status").dataset.variant).toBe("error");
@@ -181,7 +181,7 @@ describe("Darglarking Yellow hub", () => {
     fileInput.dispatchEvent(new Event("change"));
     await flushMicrotasks();
 
-    expect(status).toHaveTextContent("Loaded yellow-room.png. Ready to alter the least significant RGB bits.");
+    expect(status.textContent).toBe("Loaded yellow-room.png. Ready to alter the least significant RGB bits.");
     expect(status.dataset.variant).toBe("success");
     expect(revokeObjectUrl).toHaveBeenCalledWith("blob:source-png");
 
@@ -191,7 +191,7 @@ describe("Darglarking Yellow hub", () => {
     expect(decodeMessageFromPixels(latestCanvasContext?.currentImageData.data ?? new Uint8ClampedArray())).toBe("DY-044 regression");
     expect(downloadLink.hidden).toBe(false);
     expect(downloadLink.href).toBe("blob:encoded-png");
-    expect(status).toHaveTextContent('Embedded and verified secret: "DY-044 regression"');
+    expect(status.textContent).toBe('Embedded and verified secret: "DY-044 regression"');
     expect(createObjectUrl).toHaveBeenCalledTimes(2);
   });
 });
