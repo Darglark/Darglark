@@ -5,10 +5,10 @@ import { renderDarglarkingHub } from "./darglarkingHub";
 import { decodeMessageFromPixels } from "./steganography";
 
 class TestImageData implements ImageData {
-  readonly colorSpace = "srgb";
+  readonly colorSpace: PredefinedColorSpace = "srgb";
 
   constructor(
-    readonly data: Uint8ClampedArray,
+    readonly data: ImageDataArray,
     readonly width: number,
     readonly height: number,
   ) {}
@@ -47,13 +47,13 @@ function getElement<T extends Element>(root: ParentNode, selector: string) {
 }
 
 function createCanvasContext(canvas: HTMLCanvasElement) {
-  let currentImageData = new TestImageData(new Uint8ClampedArray(canvas.width * canvas.height * 4).fill(170), canvas.width, canvas.height);
+  let currentImageData: ImageData = new TestImageData(createPixelData(canvas.width * canvas.height * 4), canvas.width, canvas.height);
 
   const context: TestCanvasContext = {
     clearRect: vi.fn(),
     drawImage: vi.fn(),
     getImageData: vi.fn(() => {
-      currentImageData = new TestImageData(new Uint8ClampedArray(canvas.width * canvas.height * 4).fill(170), canvas.width, canvas.height);
+      currentImageData = new TestImageData(createPixelData(canvas.width * canvas.height * 4), canvas.width, canvas.height);
       return currentImageData;
     }),
     putImageData: vi.fn((imageData: ImageData) => {
@@ -67,6 +67,12 @@ function createCanvasContext(canvas: HTMLCanvasElement) {
       return currentImageData;
     },
   };
+}
+
+function createPixelData(length: number): ImageDataArray {
+  const data = new Uint8ClampedArray(new ArrayBuffer(length));
+  data.fill(170);
+  return data;
 }
 
 function setInputFiles(input: HTMLInputElement, files: File[]) {
@@ -109,7 +115,10 @@ describe("Darglarking Yellow hub", () => {
       latestCanvasContext = createCanvasContext(this);
       return latestCanvasContext.context as unknown as CanvasRenderingContext2D;
     });
-    vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation(function toBlob(callback) {
+    vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation(function toBlob(
+      this: HTMLCanvasElement,
+      callback: BlobCallback,
+    ) {
       callback(new Blob(["encoded"], { type: "image/png" }));
     });
   });
@@ -188,7 +197,7 @@ describe("Darglarking Yellow hub", () => {
     encodeButton.click();
 
     expect(latestCanvasContext?.context.putImageData).toHaveBeenCalledTimes(1);
-    expect(decodeMessageFromPixels(latestCanvasContext?.currentImageData.data ?? new Uint8ClampedArray())).toBe("DY-044 regression");
+    expect(decodeMessageFromPixels(latestCanvasContext?.currentImageData.data ?? createPixelData(0))).toBe("DY-044 regression");
     expect(downloadLink.hidden).toBe(false);
     expect(downloadLink.href).toBe("blob:encoded-png");
     expect(status.textContent).toBe('Embedded and verified secret: "DY-044 regression"');
