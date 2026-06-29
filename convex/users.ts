@@ -1,8 +1,22 @@
+import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { getCurrentUser, getCurrentUserOrNull } from "./lib/auth";
 
+const userReturn = v.object({
+  _id: v.id("users"),
+  _creationTime: v.number(),
+  tokenIdentifier: v.string(),
+  name: v.string(),
+  email: v.string(),
+  pictureUrl: v.optional(v.string()),
+  role: v.union(v.literal("user"), v.literal("admin")),
+  createdAt: v.number(),
+  updatedAt: v.optional(v.number()),
+});
+
 export const storeUser = mutation({
   args: {},
+  returns: v.id("users"),
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -39,6 +53,7 @@ export const storeUser = mutation({
 
 export const current = query({
   args: {},
+  returns: v.union(userReturn, v.null()),
   handler: async (ctx) => {
     return await getCurrentUserOrNull(ctx);
   },
@@ -46,6 +61,7 @@ export const current = query({
 
 export const requireCurrentUser = query({
   args: {},
+  returns: userReturn,
   handler: async (ctx) => {
     return await getCurrentUser(ctx);
   },
