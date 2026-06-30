@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   advanceContrastState,
   composeInterstellarSymphony,
+  deriveHostTelemetry,
   evaluateRailsThorneGuard,
   initializeRingmasterRealignment,
   sampleFractalSignature,
@@ -27,6 +28,24 @@ describe("RBC-999 telemetry models", () => {
     expect(result.status).toBe("nominal");
     expect(result.forceField).toBeNull();
     expect(result.sandbox).toBeNull();
+  });
+
+  it("derives app telemetry with reachable nominal and override guard states", () => {
+    const nominalTelemetry = deriveHostTelemetry({
+      doctrineIndex: 0,
+      protocolIndex: 0,
+      doctrineTitle: "Concealed Alpha Strike",
+    });
+    const overrideTelemetry = deriveHostTelemetry({
+      doctrineIndex: 2,
+      protocolIndex: 0,
+      doctrineTitle: "Psi Ops Endgame",
+    });
+
+    expect(nominalTelemetry.stressVelocity).toBeLessThanOrEqual(0.88);
+    expect(evaluateRailsThorneGuard(nominalTelemetry).status).toBe("nominal");
+    expect(overrideTelemetry.stressVelocity).toBeGreaterThan(0.88);
+    expect(evaluateRailsThorneGuard(overrideTelemetry).status).toBe("override-engaged");
   });
 
   it("injects reverse force and sandbox constraints when stress velocity is critical", () => {
