@@ -12,6 +12,7 @@ import { ConvexBriefings, ConvexSetupPanel } from "./ConvexBriefings";
 import { AuthStatus } from "./AuthStatus";
 import { RailsThorneGuardPanel } from "./RailsThorneGuardPanel";
 import { RougeTileStatsPanel } from "./RougeTileStatsPanel";
+import { deriveHostTelemetry } from "./rbc999Telemetry";
 
 type AppProps = {
   hasConvex: boolean;
@@ -144,11 +145,12 @@ export default function App({ hasConvex, hasPortalProviders, hasConvexAuth, redi
     [selectedDoctrineIndex, selectedProtocolIndex],
   );
   const hostTelemetry = useMemo(
-    () => ({
-      stressVelocity: Math.min(0.99, 0.91 + Math.max(selectedDoctrineIndex, 0) * 0.03),
-      companionLoad: 0.52 + Math.max(selectedProtocolIndex, 0) * 0.1,
-      entityInstability: selectedDoctrineDetail.title === "Psi Ops Endgame" ? 0.82 : 0.56,
-    }),
+    () =>
+      deriveHostTelemetry({
+        doctrineIndex: selectedDoctrineIndex,
+        protocolIndex: selectedProtocolIndex,
+        doctrineTitle: selectedDoctrineDetail.title,
+      }),
     [selectedDoctrineDetail.title, selectedDoctrineIndex, selectedProtocolIndex],
   );
 

@@ -104,6 +104,12 @@ export type HubMovementState = {
   state: "moving" | "friction-slowdown" | "idle";
 };
 
+export type HostTelemetrySeed = {
+  doctrineIndex: number;
+  protocolIndex: number;
+  doctrineTitle: string;
+};
+
 const CRITICAL_ACCELERATION_LIMIT = 0.88;
 export const NODE_044_IDENTITY_RATIO = (12 * Math.sqrt(11)) / 11;
 const FULL_LOOP = Math.PI * 2;
@@ -122,6 +128,21 @@ export function advanceContrastState(
     vortexLuck,
     velocity,
     hueRotation: Math.round(((vortexLuck + 1) / 2) * 360),
+  };
+}
+
+export function deriveHostTelemetry({
+  doctrineIndex,
+  protocolIndex,
+  doctrineTitle,
+}: HostTelemetrySeed): HostTelemetry {
+  const safeDoctrineIndex = Math.max(doctrineIndex, 0);
+  const safeProtocolIndex = Math.max(protocolIndex, 0);
+
+  return {
+    stressVelocity: Math.min(0.99, 0.76 + safeDoctrineIndex * 0.09),
+    companionLoad: 0.52 + safeProtocolIndex * 0.1,
+    entityInstability: doctrineTitle === "Psi Ops Endgame" ? 0.82 : 0.56,
   };
 }
 
