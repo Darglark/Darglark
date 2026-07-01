@@ -162,15 +162,20 @@ describe("Darglarking Yellow hub interactions", () => {
     encodeButton.click();
     await waitForAsyncHandlers();
 
-    expect(encodedPixels).not.toBeNull();
-    expect(decodeMessageFromPixels(encodedPixels ?? new Uint8ClampedArray())).toBe("DY-044 regression sentinel");
+    const capturedPixels = encodedPixels;
+    expect(capturedPixels).not.toBeNull();
+    if (!capturedPixels) {
+      throw new Error("Expected the hub to write encoded pixels back to the canvas.");
+    }
+
+    expect(decodeMessageFromPixels(capturedPixels)).toBe("DY-044 regression sentinel");
     expect(downloadLink.hidden).toBe(false);
     expect(downloadLink.href).toBe("blob:dy-test");
     expect(status.textContent).toBe('Embedded and verified secret: "DY-044 regression sentinel"');
     expect(status.dataset.variant).toBe("success");
 
-    for (let index = 3; index < encodedPixels.length; index += 4) {
-      expect(encodedPixels[index]).toBe(255);
+    for (let index = 3; index < capturedPixels.length; index += 4) {
+      expect(capturedPixels[index]).toBe(255);
     }
   });
 });
