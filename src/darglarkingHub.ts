@@ -2,6 +2,60 @@ import { decodeMessageFromPixels, embedMessageInPixels } from "./steganography";
 
 const ARCHIVE_URL =
   "https://web.archive.org/web/20131127040404/https://darglarking-yellow.invalid/archive/case-044-yellow-room.html";
+const PNG_HEADER_BYTE_LENGTH = 24;
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a] as const;
+const PNG_IHDR_CHUNK_TYPE = "IHDR";
+export const MAX_STEGO_IMAGE_DIMENSION = 4096;
+export const MAX_STEGO_IMAGE_PIXELS = 4_194_304;
+
+export type PngDimensions = {
+  width: number;
+  height: number;
+};
+
+function readUint32BigEndian(bytes: Uint8Array, offset: number) {
+  return (
+    bytes[offset] * 2 ** 24 +
+    bytes[offset + 1] * 2 ** 16 +
+    bytes[offset + 2] * 2 ** 8 +
+    bytes[offset + 3]
+  );
+}
+
+export function getPngDimensions(header: ArrayBuffer | Uint8Array): PngDimensions {
+  const bytes = header instanceof Uint8Array ? header : new Uint8Array(header);
+
+  if (bytes.length < PNG_HEADER_BYTE_LENGTH) {
+    throw new Error("The selected PNG is missing its dimension header.");
+  }
+
+  const hasPngSignature = PNG_SIGNATURE.every((value, index) => bytes[index] === value);
+  const chunkType = String.fromCharCode(...bytes.slice(12, 16));
+
+  if (!hasPngSignature || chunkType !== PNG_IHDR_CHUNK_TYPE) {
+    throw new Error("The selected file is not a valid PNG asset.");
+  }
+
+  const width = readUint32BigEndian(bytes, 16);
+  const height = readUint32BigEndian(bytes, 20);
+
+  if (width === 0 || height === 0) {
+    throw new Error("The selected PNG has invalid dimensions.");
+  }
+
+  return { width, height };
+}
+
+export function validatePngDimensions({ width, height }: PngDimensions) {
+  const exceedsDimensionLimit = width > MAX_STEGO_IMAGE_DIMENSION || height > MAX_STEGO_IMAGE_DIMENSION;
+  const exceedsPixelLimit = width > MAX_STEGO_IMAGE_PIXELS / height;
+
+  if (exceedsDimensionLimit || exceedsPixelLimit) {
+    throw new Error(
+      `PNG is too large for browser-safe local encoding. Select an image up to ${MAX_STEGO_IMAGE_DIMENSION}px per side and ${MAX_STEGO_IMAGE_PIXELS.toLocaleString()} total pixels.`,
+    );
+  }
+}
 
 function getElement<T extends HTMLElement>(root: ParentNode, selector: string) {
   const element = root.querySelector<T>(selector);
@@ -28,6 +82,13 @@ function readImageFile(file: File) {
     };
     image.src = objectUrl;
   });
+}
+
+async function validatePngFileForCanvas(file: File) {
+  const dimensions = getPngDimensions(await file.slice(0, PNG_HEADER_BYTE_LENGTH).arrayBuffer());
+  validatePngDimensions(dimensions);
+
+  return dimensions;
 }
 
 function setStatus(status: HTMLElement, message: string, variant: "idle" | "success" | "error" = "idle") {
@@ -195,7 +256,9 @@ export function renderDarglarkingHub(root: HTMLElement) {
     }
 
     try {
+      await validatePngFileForCanvas(file);
       const image = await readImageFile(file);
+      validatePngDimensions({ width: image.naturalWidth, height: image.naturalHeight });
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
       context.clearRect(0, 0, canvas.width, canvas.height);
